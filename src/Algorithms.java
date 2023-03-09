@@ -24,10 +24,10 @@ public abstract class Algorithms {
     }
 
     /* Swap the location of 2 integers */
-    public void swap(int currentLocation) {
-        int temp = this.list[currentLocation];
-        this.list[currentLocation] = this.list[currentLocation + 1];
-        this.list[currentLocation + 1] = temp;
+    public void swap(int locationOne, int locationTwo) {
+        int temp = this.getList()[locationOne];
+        this.getList()[locationOne] = this.getList()[locationTwo];
+        this.getList()[locationTwo] = temp;
     }
 
     /* Prints our list of integers */
@@ -40,7 +40,7 @@ public abstract class Algorithms {
 
     /* Abstract method responsible for the logic of each sorting algorithm */
     public abstract void sortList();
-    
+
     public int[] getList() {
         return list;
     }
