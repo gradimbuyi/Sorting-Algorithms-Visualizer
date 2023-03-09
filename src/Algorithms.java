@@ -5,12 +5,14 @@ public abstract class Algorithms {
     private int arraySize;
     private Random random;
 
+    /* Default constructor for each of our algorithms */
     public Algorithms(int arraySize) {
         this.arraySize = arraySize;
         this.random = new Random();
         this.list = generateNumbers();
     }
 
+    /* Generates random integer values */
     private int [] generateNumbers() {
         list = new int[this.arraySize];
 
@@ -21,12 +23,14 @@ public abstract class Algorithms {
         return list;
     }
 
+    /* Swap the location of 2 integers */
     public void swap(int currentLocation) {
         int temp = this.list[currentLocation];
         this.list[currentLocation] = this.list[currentLocation + 1];
         this.list[currentLocation + 1] = temp;
     }
 
+    /* Prints our list of integers */
     public void printList() {
         for(int i =  0; i < this.arraySize; i++) {
             System.out.print(this.list[i] + " ");
@@ -34,8 +38,9 @@ public abstract class Algorithms {
         System.out.println();
     }
 
+    /* Abstract method responsible for the logic of each sorting algorithm */
     public abstract void sortList();
-
+    
     public int[] getList() {
         return list;
     }
