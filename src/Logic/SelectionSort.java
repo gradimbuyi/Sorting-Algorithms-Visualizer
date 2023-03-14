@@ -1,6 +1,19 @@
+package Logic;
+
+import java.util.ArrayList;
+
 public class SelectionSort extends Algorithms {
-    public SelectionSort(int arraySize) {
-        super(arraySize);
+    public SelectionSort(ArrayList<Integer> list, int arraySize) {
+        super(list, arraySize);
+    }
+
+    @Override
+    public String printInfo(int type) {
+
+        if(type == 0) return "O(n^2)";
+        if(type == 1) return "O(1)";
+
+        return null;
     }
 
     /* Method to find the lowest value in our array */
@@ -9,7 +22,7 @@ public class SelectionSort extends Algorithms {
 
         /* Loop through our array from our current location to the last index */
         for(int i = currentLocation + 1; i < getArraySize(); i++) {
-            if(getList()[lowestValueLocation] > getList()[i]) {
+            if(getList().get(lowestValueLocation) > getList().get(i)) {
                 lowestValueLocation = i;
             }
         }
@@ -24,10 +37,11 @@ public class SelectionSort extends Algorithms {
 
         for(int i = 0; i < getArraySize(); i++) {
             lowestValueLocation = findLowestValue(i);
-            swap(lowestValueLocation, i);
-            printList();
+            swap(lowestValueLocation, i);   printList();
         }
 
         System.out.println();
     }
+
+
 }
