@@ -4,9 +4,9 @@ This is a personal project implementing 5 of the sorting algorithms covered in U
 
 ## Compiling the Program
 ```
-javac Main.java
+$ javac Main.java
 ```
 ## Executing the Program
 ```
-java ./Main
+$ java ./Main
 ```
