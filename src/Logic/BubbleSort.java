@@ -1,5 +1,7 @@
 package Logic;
+import Graphics.VisualizerPanel;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 public class BubbleSort extends Algorithms {
@@ -16,12 +18,29 @@ public class BubbleSort extends Algorithms {
     }
 
     @Override
-    public void sortList() {
-        for(int i = 0; i < this.getArraySize() - 1; i++) {
-            for(int j = 0; j < this.getArraySize() - i - 1; j++) {
-                if(this.getList().get(j) > this.getList().get(j + 1)) swap(j, j + 1);
-                printList();
+    public void sortList(VisualizerPanel visualizerPanel) {
+        SwingWorker<Void, Void> animate = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+
+                for(int i = 0; i < getArraySize() - 1; i++) {
+                    for(int j = 0; j < getArraySize() - i - 1; j++) {
+
+                        if(getList().get(j) > getList().get(j + 1)) {
+                            swap(j, j + 1);
+                        }
+                    }
+
+                    Thread.sleep(5);
+                    visualizerPanel.repaint();
+                }
+
+                return null;
             }
-        }   System.out.println();
+        };
+
+        visualizerPanel.setAnimate(animate);
+        animate.execute();
+
     }
 }

@@ -14,13 +14,12 @@ public class VisualizerPanel extends JPanel implements ActionListener {
     private ArrayList<Integer> list;
     private Algorithms algorithm;
 
-    /* Timer variable for animation */
-    private final Timer timer;
-
     /* Button variables */
     private final JComboBox<String> dropDownMenu;
     private final JButton start;
     private final JButton reset;
+
+    private SwingWorker<Void, Void> animate = null;
 
     /* CONSTRUCTOR */
     public VisualizerPanel() {
@@ -33,10 +32,6 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         this.start = initializeButton("Start", 0);
         this.reset = initializeButton("Reset", 100);
 
-        /* Initialize the timer */
-        this.timer = new Timer(10, this);
-        this.timer.start();
-
         /* Add button and timer to Panel */
         this.add(dropDownMenu);
         this.add(start);
@@ -46,6 +41,14 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         this.setBackground(Color.black);
         this.setSize(1600, 872);
         this.setLayout(null);
+    }
+
+    public SwingWorker<Void, Void> getAnimate() {
+        return animate;
+    }
+
+    public void setAnimate(SwingWorker<Void, Void> animate) {
+        this.animate = animate;
     }
 
     /* Method to initialize drop down menu */
@@ -80,7 +83,7 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         ArrayList<Integer> numbers = new ArrayList<>();
 
         /* Generates numbers from 4 to 67 and shuffles our array */
-        for(int i = 0; i < 63; i++) numbers.add(i + 4);
+        for(int i = 0; i < 1600; i++) numbers.add((int) ((i / 9.5) + 1));
         Collections.shuffle(numbers); return numbers;
     }
 
@@ -102,8 +105,8 @@ public class VisualizerPanel extends JPanel implements ActionListener {
     private Algorithms initializeAlgorithm(String name) {
         Algorithms newAlgorithm = null;
 
-        if(name.equals("Bubble Sort")) newAlgorithm = new BubbleSort(this.list, 63);
-        if(name.equals("Selection Sort")) newAlgorithm = new SelectionSort(this.list, 63);
+        if(name.equals("Bubble Sort")) newAlgorithm = new BubbleSort(this.list, 1600);
+        if(name.equals("Selection Sort")) newAlgorithm = new SelectionSort(this.list, 1600);
 
         return newAlgorithm;
     }
@@ -122,28 +125,35 @@ public class VisualizerPanel extends JPanel implements ActionListener {
 
     /* Draws rectangle based on values in the list */
     private void paintRect(Graphics graphics) {
-        int x = 5;
-        int height;
+        int x = 1, height;
 
-        for (int i = 0; i < 63; i++) {
-            height = list.get(i) * 10;
-            graphics.fillRect(x, 865 - height, 20, height);
+        for (int i = 0; i < 1600; i++) {
+            height = list.get(i) * 4;
+            graphics.fillRect(x, 865 - height, 1, height);
 
-            x = x + 25;
+            x = x + 1;
         }
     }
 
     /* Animates our program */
     @Override
     public void actionPerformed(ActionEvent event) {
+
         if(event.getSource() == this.dropDownMenu) {
-            Collections.shuffle(this.list); repaint();
+            if(animate != null) animate.cancel(true);
+
+            Collections.shuffle(this.list);
+            repaint();
 
         } else if(event.getSource() == this.reset) {
-            Collections.shuffle(this.list); repaint();
+           if(animate != null) animate.cancel(true);
+
+           Collections.shuffle(this.list);
+           repaint();
 
         } else if(event.getSource() == this.start) {
-            algorithm.sortList(); repaint();
+            algorithm.sortList(this);
         }
+
     }
 }

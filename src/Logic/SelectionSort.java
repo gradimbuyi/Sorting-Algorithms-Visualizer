@@ -1,5 +1,7 @@
 package Logic;
 
+import Graphics.VisualizerPanel;
+import javax.swing.SwingWorker;
 import java.util.ArrayList;
 
 public class SelectionSort extends Algorithms {
@@ -32,16 +34,25 @@ public class SelectionSort extends Algorithms {
     }
 
     @Override
-    public void sortList() {
-        int lowestValueLocation;
+    public void sortList(VisualizerPanel visualizerPanel) {
+        SwingWorker<Void, Void> animate = new SwingWorker<>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+                int lowestValueLocation;
 
-        for(int i = 0; i < getArraySize(); i++) {
-            lowestValueLocation = findLowestValue(i);
-            swap(lowestValueLocation, i);   printList();
-        }
+                for (int i = 0; i < getArraySize(); i++) {
+                    lowestValueLocation = findLowestValue(i);
+                    swap(lowestValueLocation, i);
 
-        System.out.println();
+                    Thread.sleep(5);
+                    visualizerPanel.repaint();
+                }
+
+                return null;
+            }
+        };
+
+        visualizerPanel.setAnimate(animate);
+        animate.execute();
     }
-
-
 }
