@@ -45,7 +45,7 @@ public class InsertionSort extends Algorithms {
                     low_index = insertion_sort_find_position(high_index, current);
                     getList().set(low_index, current);
 
-                    Thread.sleep(5);
+                    Thread.sleep(getSleep());
                     visualizerPanel.repaint();
                 }
 

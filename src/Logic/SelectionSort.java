@@ -45,7 +45,7 @@ public class SelectionSort extends Algorithms {
                     lowestValueLocation = findLowestValue(i);
                     swap(lowestValueLocation, i);
 
-                    Thread.sleep(5);
+                    Thread.sleep(getSleep());
                     visualizerPanel.repaint();
                 }
 

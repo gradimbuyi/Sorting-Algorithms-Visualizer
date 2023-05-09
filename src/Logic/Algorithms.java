@@ -7,6 +7,8 @@ public abstract class Algorithms {
     private final ArrayList<Integer> list;
     private final int arraySize;
 
+    private int sleep = 100;
+
     /* Default constructor for the algorithms */
     public Algorithms(ArrayList<Integer> list, int arraySize) {
         this.arraySize = arraySize;
@@ -39,5 +41,9 @@ public abstract class Algorithms {
 
     public int getArraySize() {
         return arraySize;
+    }
+
+    public int getSleep() {
+        return sleep;
     }
 }

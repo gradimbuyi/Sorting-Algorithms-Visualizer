@@ -27,6 +27,11 @@ public class VisualizerPanel extends JPanel implements ActionListener {
 
     /* variable for animation */
     private SwingWorker<Void, Void> animate = null;
+    private final int size = 63;
+
+    private int green = -1;
+    private int red = -1;
+    private int blue = -1;
 
     /* CONSTRUCTOR */
     public VisualizerPanel() {
@@ -91,8 +96,8 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         ArrayList<Integer> numbers = new ArrayList<>();
 
         /* Generates numbers from 4 to 67 and shuffles our array */
-        for(int i = 0; i < 1578; i++) {
-            numbers.add((int) ((i / 9.5) + 2));
+        for(int i = 0; i < size; i++) {
+            numbers.add(i + 4);
         }
 
         Collections.shuffle(numbers);
@@ -111,19 +116,19 @@ public class VisualizerPanel extends JPanel implements ActionListener {
 
         /* Draws rectangles representing each number in the list */
         paintInfo(graphics);
-        paintRect(graphics);
+        paintRect(graphics, green, red, blue);
     }
 
     /* Initialize algorithm for animation */
     private Algorithms initializeAlgorithm(String name) {
         Algorithms newAlgorithm = null;
 
-        if(name.equals("Bubble Sort")) newAlgorithm = new BubbleSort(list, 1578);
-        if(name.equals("Selection Sort")) newAlgorithm = new SelectionSort(list, 1578);
-        if(name.equals("Insertion Sort")) newAlgorithm = new InsertionSort(list, 1578);
-        if(name.equals("Quick Sort")) newAlgorithm = new QuickSort(list, 1578);
-        if(name.equals("Merge Sort")) newAlgorithm = new MergeSort(list, 1578);
-        if(name.equals("Merge Insertion Sort")) newAlgorithm = new MergeInsertionSort(list, 1578);
+        if(name.equals("Bubble Sort")) newAlgorithm = new BubbleSort(list, size);
+        if(name.equals("Selection Sort")) newAlgorithm = new SelectionSort(list, size);
+        if(name.equals("Insertion Sort")) newAlgorithm = new InsertionSort(list, size);
+        if(name.equals("Quick Sort")) newAlgorithm = new QuickSort(list, size);
+        if(name.equals("Merge Sort")) newAlgorithm = new MergeSort(list, size);
+        if(name.equals("Merge Insertion Sort")) newAlgorithm = new MergeInsertionSort(list, size);
 
         return newAlgorithm;
     }
@@ -140,15 +145,38 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         graphics.drawString("Space Complexity: " + algorithm.printInfo(1), 50, 180);
     }
 
+    public void setGreen(int green) {
+        this.green = green;
+    }
+
+    public void setRed(int red) {
+        this.red = red;
+    }
+
+    public void setBlue(int blue) {
+        this.blue = blue;
+    }
+
+    private void resetColor() {
+        this.green = -1; this.red = -1; this.blue = -1;
+    }
+
     /* Draws rectangle based on values in the list */
-    private void paintRect(Graphics graphics) {
-        int x = 1, height;
+    private void paintRect(Graphics graphics, int green, int red, int blue) {
+        int x = 5;
+        int height;
 
-        for (int i = 0; i < 1578; i++) {
-            height = list.get(i) * 4;
-            graphics.fillRect(x, 865 - height, 1, height);
+        for (int i = 0; i < size; i++) {
 
-            x = x + 1;
+            if(green == i) graphics.setColor(Color.GREEN);
+            else if(red == i) graphics.setColor(Color.RED);
+            else if(blue == i) graphics.setColor(Color.CYAN);
+            else graphics.setColor(Color.WHITE);
+
+            height = list.get(i) * 10;
+            graphics.fillRect(x, 865 - height, 20, height);
+
+            x = x + 25;
         }
     }
 
@@ -157,6 +185,8 @@ public class VisualizerPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent event) {
 
         if(animate != null) animate.cancel(true);
+
+        this.resetColor();
 
         if(event.getSource() == dropDownMenu || event.getSource() == reset) {
 

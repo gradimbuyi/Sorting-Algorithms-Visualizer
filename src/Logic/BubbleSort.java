@@ -3,6 +3,7 @@ package Logic;
 import Graphics.VisualizerPanel;
 
 import javax.swing.SwingWorker;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class BubbleSort extends Algorithms {
@@ -30,16 +31,20 @@ public class BubbleSort extends Algorithms {
 
                         if(getList().get(j) > getList().get(j + 1)) {
                             swap(j, j + 1);
+
+                            Thread.sleep(getSleep() - 90);
+
+                            visualizerPanel.setRed(j + 2);
+                            visualizerPanel.repaint();
                         }
                     }
-
-                    Thread.sleep(5);
-                    visualizerPanel.repaint();
                 }
 
                 return null;
             }
         };
+
+        visualizerPanel.setRed(-1);
 
         visualizerPanel.setAnimate(animate);
         animate.execute();
