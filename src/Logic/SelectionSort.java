@@ -36,6 +36,7 @@ public class SelectionSort extends Algorithms {
     @Override
     public void sortList(VisualizerPanel visualizerPanel) {
         SwingWorker<Void, Void> animate = new SwingWorker<>() {
+
             @Override
             protected Void doInBackground() throws Exception {
                 int lowestValueLocation;

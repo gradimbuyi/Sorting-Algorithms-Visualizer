@@ -1,8 +1,14 @@
 package Graphics;
+
 import Logic.*;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JComboBox;
+import javax.swing.SwingWorker;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -19,18 +25,19 @@ public class VisualizerPanel extends JPanel implements ActionListener {
     private final JButton start;
     private final JButton reset;
 
+    /* variable for animation */
     private SwingWorker<Void, Void> animate = null;
 
     /* CONSTRUCTOR */
     public VisualizerPanel() {
 
         /* Generates the integers used to perform the visualization */
-        this.list = generateNumbers();
+        list = generateNumbers();
 
         /* Initialize the buttons */
-        this.dropDownMenu = initializeDropDownMenu();
-        this.start = initializeButton("Start", 0);
-        this.reset = initializeButton("Reset", 100);
+        dropDownMenu = initializeDropDownMenu();
+        start = initializeButton("Start", 0);
+        reset = initializeButton("Reset", 100);
 
         /* Add button and timer to Panel */
         this.add(dropDownMenu);
@@ -41,10 +48,6 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         this.setBackground(Color.black);
         this.setSize(1600, 872);
         this.setLayout(null);
-    }
-
-    public SwingWorker<Void, Void> getAnimate() {
-        return animate;
     }
 
     public void setAnimate(SwingWorker<Void, Void> animate) {
@@ -61,6 +64,11 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         /* Names of Algorithms */
         menu.addItem("Bubble Sort");
         menu.addItem("Selection Sort");
+        menu.addItem("Insertion Sort");
+        menu.addItem("Quick Sort");
+        menu.addItem("Merge Sort");
+        menu.addItem("Merge Insertion Sort");
+
         menu.addActionListener(this);
 
         return menu;
@@ -83,8 +91,12 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         ArrayList<Integer> numbers = new ArrayList<>();
 
         /* Generates numbers from 4 to 67 and shuffles our array */
-        for(int i = 0; i < 1600; i++) numbers.add((int) ((i / 9.5) + 1));
-        Collections.shuffle(numbers); return numbers;
+        for(int i = 0; i < 1578; i++) {
+            numbers.add((int) ((i / 9.5) + 2));
+        }
+
+        Collections.shuffle(numbers);
+        return numbers;
     }
 
     /* Visualizes the data on the panel */
@@ -98,15 +110,20 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         graphics.drawString("Sorting Algorithms Visualizer", 600, 70);
 
         /* Draws rectangles representing each number in the list */
-        paintInfo(graphics); paintRect(graphics);
+        paintInfo(graphics);
+        paintRect(graphics);
     }
 
     /* Initialize algorithm for animation */
     private Algorithms initializeAlgorithm(String name) {
         Algorithms newAlgorithm = null;
 
-        if(name.equals("Bubble Sort")) newAlgorithm = new BubbleSort(this.list, 1600);
-        if(name.equals("Selection Sort")) newAlgorithm = new SelectionSort(this.list, 1600);
+        if(name.equals("Bubble Sort")) newAlgorithm = new BubbleSort(list, 1578);
+        if(name.equals("Selection Sort")) newAlgorithm = new SelectionSort(list, 1578);
+        if(name.equals("Insertion Sort")) newAlgorithm = new InsertionSort(list, 1578);
+        if(name.equals("Quick Sort")) newAlgorithm = new QuickSort(list, 1578);
+        if(name.equals("Merge Sort")) newAlgorithm = new MergeSort(list, 1578);
+        if(name.equals("Merge Insertion Sort")) newAlgorithm = new MergeInsertionSort(list, 1578);
 
         return newAlgorithm;
     }
@@ -114,10 +131,10 @@ public class VisualizerPanel extends JPanel implements ActionListener {
     /* Prints information related to the algorithm */
     private void paintInfo(Graphics graphics) {
         graphics.setFont(new Font("Arial", Font.PLAIN, 15));
-        graphics.drawString("Algorithm: " + this.dropDownMenu.getSelectedItem(), 50, 120);
+        graphics.drawString("Algorithm: " + dropDownMenu.getSelectedItem(), 50, 120);
 
         /* Initialize algorithm */
-        this.algorithm = initializeAlgorithm((String) this.dropDownMenu.getSelectedItem());
+        algorithm = initializeAlgorithm((String) dropDownMenu.getSelectedItem());
 
         graphics.drawString("Time Complexity: " + algorithm.printInfo(0), 50, 150);
         graphics.drawString("Space Complexity: " + algorithm.printInfo(1), 50, 180);
@@ -127,7 +144,7 @@ public class VisualizerPanel extends JPanel implements ActionListener {
     private void paintRect(Graphics graphics) {
         int x = 1, height;
 
-        for (int i = 0; i < 1600; i++) {
+        for (int i = 0; i < 1578; i++) {
             height = list.get(i) * 4;
             graphics.fillRect(x, 865 - height, 1, height);
 
@@ -139,19 +156,28 @@ public class VisualizerPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent event) {
 
-        if(event.getSource() == this.dropDownMenu) {
-            if(animate != null) animate.cancel(true);
+        if(animate != null) animate.cancel(true);
 
-            Collections.shuffle(this.list);
-            repaint();
+        if(event.getSource() == dropDownMenu || event.getSource() == reset) {
 
-        } else if(event.getSource() == this.reset) {
-           if(animate != null) animate.cancel(true);
+            animate = new SwingWorker<>() {
 
-           Collections.shuffle(this.list);
-           repaint();
+                @Override
+                protected Void doInBackground() throws Exception {
+                    for(int i = 0; i < 20; i++) {
+                        Collections.shuffle(list);
+                        Thread.sleep(10);
 
-        } else if(event.getSource() == this.start) {
+                        repaint();
+                    }
+                    return null;
+                }
+            };
+
+            animate.execute();
+        }
+
+        else if(event.getSource() == start) {
             algorithm.sortList(this);
         }
 

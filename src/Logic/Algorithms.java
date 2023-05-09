@@ -1,7 +1,6 @@
 package Logic;
 
 import Graphics.VisualizerPanel;
-
 import java.util.ArrayList;
 
 public abstract class Algorithms {
@@ -21,12 +20,11 @@ public abstract class Algorithms {
         this.getList().set(locationTwo, temp);
     }
 
-    /* Prints list of integers */
-    public void printList() {
-        for(int i =  0; i < this.arraySize; i++) {
-            System.out.print(this.list.get(i) + " ");
-        }
-        System.out.println();
+    public int compare(int numOne, int numTwo) {
+        if(numOne > numTwo) return 1;
+        else if(numOne == numTwo) return 0;
+
+        return -1;
     }
 
     /* Prints Algorithms time and space complexity */

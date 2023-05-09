@@ -1,7 +1,8 @@
 package Logic;
+
 import Graphics.VisualizerPanel;
 
-import javax.swing.*;
+import javax.swing.SwingWorker;
 import java.util.ArrayList;
 
 public class BubbleSort extends Algorithms {
@@ -20,6 +21,7 @@ public class BubbleSort extends Algorithms {
     @Override
     public void sortList(VisualizerPanel visualizerPanel) {
         SwingWorker<Void, Void> animate = new SwingWorker<>() {
+
             @Override
             protected Void doInBackground() throws Exception {
 
@@ -41,6 +43,5 @@ public class BubbleSort extends Algorithms {
 
         visualizerPanel.setAnimate(animate);
         animate.execute();
-
     }
 }
