@@ -1,14 +1,12 @@
 package Logic;
 
 import Graphics.VisualizerPanel;
-
 import javax.swing.SwingWorker;
-import java.awt.*;
 import java.util.ArrayList;
 
 public class BubbleSort extends Algorithms {
-    public BubbleSort(ArrayList<Integer> list, int arraySize) {
-        super(list, arraySize);
+    public BubbleSort(ArrayList<Integer> list, int arraySize, VisualizerPanel visualizerPanel) {
+        super(list, arraySize, visualizerPanel);
     }
 
     @Override
@@ -20,7 +18,7 @@ public class BubbleSort extends Algorithms {
     }
 
     @Override
-    public void sortList(VisualizerPanel visualizerPanel) {
+    public void sortList() {
         SwingWorker<Void, Void> animate = new SwingWorker<>() {
 
             @Override
@@ -31,11 +29,6 @@ public class BubbleSort extends Algorithms {
 
                         if(getList().get(j) > getList().get(j + 1)) {
                             swap(j, j + 1);
-
-                            Thread.sleep(getSleep() - 90);
-
-                            visualizerPanel.setRed(j + 2);
-                            visualizerPanel.repaint();
                         }
                     }
                 }
@@ -44,9 +37,7 @@ public class BubbleSort extends Algorithms {
             }
         };
 
-        visualizerPanel.setRed(-1);
-
-        visualizerPanel.setAnimate(animate);
+        getVisualizerPanel().setAnimate(animate);
         animate.execute();
     }
 }

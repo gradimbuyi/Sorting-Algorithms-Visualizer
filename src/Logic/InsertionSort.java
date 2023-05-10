@@ -1,14 +1,13 @@
 package Logic;
 
 import Graphics.VisualizerPanel;
-
 import javax.swing.SwingWorker;
 import java.util.ArrayList;
 
 public class InsertionSort extends Algorithms {
 
-    public InsertionSort(ArrayList<Integer> list, int arraySize) {
-        super(list, arraySize);
+    public InsertionSort(ArrayList<Integer> list, int arraySize, VisualizerPanel visualizerPanel) {
+        super(list, arraySize, visualizerPanel);
     }
 
     @Override
@@ -31,7 +30,7 @@ public class InsertionSort extends Algorithms {
     }
 
     @Override
-    public void sortList(VisualizerPanel visualizerPanel) {
+    public void sortList() {
         SwingWorker<Void, Void> animate = new SwingWorker<>() {
             @Override
             protected Void doInBackground() throws Exception {
@@ -45,15 +44,15 @@ public class InsertionSort extends Algorithms {
                     low_index = insertion_sort_find_position(high_index, current);
                     getList().set(low_index, current);
 
-                    Thread.sleep(getSleep());
-                    visualizerPanel.repaint();
+                    Thread.sleep(100);
+                    getVisualizerPanel().repaint();
                 }
 
                 return null;
             }
         };
 
-        visualizerPanel.setAnimate(animate);
+        getVisualizerPanel().setAnimate(animate);
         animate.execute();
     }
 }

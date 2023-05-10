@@ -5,8 +5,8 @@ import javax.swing.SwingWorker;
 import java.util.ArrayList;
 
 public class SelectionSort extends Algorithms {
-    public SelectionSort(ArrayList<Integer> list, int arraySize) {
-        super(list, arraySize);
+    public SelectionSort(ArrayList<Integer> list, int arraySize, VisualizerPanel visualizerPanel) {
+        super(list, arraySize, visualizerPanel);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class SelectionSort extends Algorithms {
     }
 
     @Override
-    public void sortList(VisualizerPanel visualizerPanel) {
+    public void sortList() {
         SwingWorker<Void, Void> animate = new SwingWorker<>() {
 
             @Override
@@ -44,16 +44,13 @@ public class SelectionSort extends Algorithms {
                 for (int i = 0; i < getArraySize(); i++) {
                     lowestValueLocation = findLowestValue(i);
                     swap(lowestValueLocation, i);
-
-                    Thread.sleep(getSleep());
-                    visualizerPanel.repaint();
                 }
 
                 return null;
             }
         };
 
-        visualizerPanel.setAnimate(animate);
+        getVisualizerPanel().setAnimate(animate);
         animate.execute();
     }
 }

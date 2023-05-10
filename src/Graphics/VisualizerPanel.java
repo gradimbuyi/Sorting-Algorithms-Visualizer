@@ -1,7 +1,6 @@
 package Graphics;
 
 import Logic.*;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JComboBox;
@@ -13,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Objects;
 
 public class VisualizerPanel extends JPanel implements ActionListener {
 
@@ -28,10 +28,6 @@ public class VisualizerPanel extends JPanel implements ActionListener {
     /* variable for animation */
     private SwingWorker<Void, Void> animate = null;
     private final int size = 63;
-
-    private int green = -1;
-    private int red = -1;
-    private int blue = -1;
 
     /* CONSTRUCTOR */
     public VisualizerPanel() {
@@ -116,19 +112,19 @@ public class VisualizerPanel extends JPanel implements ActionListener {
 
         /* Draws rectangles representing each number in the list */
         paintInfo(graphics);
-        paintRect(graphics, green, red, blue);
+        paintRect(graphics);
     }
 
     /* Initialize algorithm for animation */
     private Algorithms initializeAlgorithm(String name) {
         Algorithms newAlgorithm = null;
 
-        if(name.equals("Bubble Sort")) newAlgorithm = new BubbleSort(list, size);
-        if(name.equals("Selection Sort")) newAlgorithm = new SelectionSort(list, size);
-        if(name.equals("Insertion Sort")) newAlgorithm = new InsertionSort(list, size);
-        if(name.equals("Quick Sort")) newAlgorithm = new QuickSort(list, size);
-        if(name.equals("Merge Sort")) newAlgorithm = new MergeSort(list, size);
-        if(name.equals("Merge Insertion Sort")) newAlgorithm = new MergeInsertionSort(list, size);
+        if(name.equals("Bubble Sort")) newAlgorithm = new BubbleSort(list, size, this);
+        if(name.equals("Selection Sort")) newAlgorithm = new SelectionSort(list, size, this);
+        if(name.equals("Insertion Sort")) newAlgorithm = new InsertionSort(list, size, this);
+        if(name.equals("Quick Sort")) newAlgorithm = new QuickSort(list, size, this);
+        if(name.equals("Merge Sort")) newAlgorithm = new MergeSort(list, size, this);
+        if(name.equals("Merge Insertion Sort")) newAlgorithm = new MergeInsertionSort(list, size, this);
 
         return newAlgorithm;
     }
@@ -139,40 +135,19 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         graphics.drawString("Algorithm: " + dropDownMenu.getSelectedItem(), 50, 120);
 
         /* Initialize algorithm */
-        algorithm = initializeAlgorithm((String) dropDownMenu.getSelectedItem());
+        algorithm = initializeAlgorithm((String) Objects.requireNonNull(dropDownMenu.getSelectedItem()));
 
         graphics.drawString("Time Complexity: " + algorithm.printInfo(0), 50, 150);
         graphics.drawString("Space Complexity: " + algorithm.printInfo(1), 50, 180);
     }
 
-    public void setGreen(int green) {
-        this.green = green;
-    }
-
-    public void setRed(int red) {
-        this.red = red;
-    }
-
-    public void setBlue(int blue) {
-        this.blue = blue;
-    }
-
-    private void resetColor() {
-        this.green = -1; this.red = -1; this.blue = -1;
-    }
 
     /* Draws rectangle based on values in the list */
-    private void paintRect(Graphics graphics, int green, int red, int blue) {
+    private void paintRect (Graphics graphics){
         int x = 5;
         int height;
 
         for (int i = 0; i < size; i++) {
-
-            if(green == i) graphics.setColor(Color.GREEN);
-            else if(red == i) graphics.setColor(Color.RED);
-            else if(blue == i) graphics.setColor(Color.CYAN);
-            else graphics.setColor(Color.WHITE);
-
             height = list.get(i) * 10;
             graphics.fillRect(x, 865 - height, 20, height);
 
@@ -180,13 +155,12 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         }
     }
 
+
     /* Animates our program */
     @Override
     public void actionPerformed(ActionEvent event) {
 
         if(animate != null) animate.cancel(true);
-
-        this.resetColor();
 
         if(event.getSource() == dropDownMenu || event.getSource() == reset) {
 
@@ -208,7 +182,7 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         }
 
         else if(event.getSource() == start) {
-            algorithm.sortList(this);
+            algorithm.sortList();
         }
 
     }

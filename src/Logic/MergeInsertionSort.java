@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 public class MergeInsertionSort extends Algorithms {
 
-    public MergeInsertionSort(ArrayList<Integer> list, int arraySize){
-        super(list, arraySize);
+    public MergeInsertionSort(ArrayList<Integer> list, int arraySize, VisualizerPanel visualizerPanel){
+        super(list, arraySize, visualizerPanel);
     }
 
     @Override
@@ -15,7 +15,7 @@ public class MergeInsertionSort extends Algorithms {
     }
 
     @Override
-    public void sortList(VisualizerPanel visualizerPanel) {
+    public void sortList() {
 
     }
 }

@@ -6,20 +6,23 @@ import java.util.ArrayList;
 public abstract class Algorithms {
     private final ArrayList<Integer> list;
     private final int arraySize;
-
-    private int sleep = 100;
+    private final VisualizerPanel visualizerPanel;
 
     /* Default constructor for the algorithms */
-    public Algorithms(ArrayList<Integer> list, int arraySize) {
+    public Algorithms(ArrayList<Integer> list, int arraySize, VisualizerPanel visualizerPanel) {
         this.arraySize = arraySize;
         this.list = list;
+        this.visualizerPanel = visualizerPanel;
     }
 
     /* Swap the location of 2 integers */
-    public void swap(int locationOne, int locationTwo) {
+    public void swap(int locationOne, int locationTwo) throws InterruptedException {
         int temp = this.getList().get(locationOne);
         this.getList().set(locationOne, this.getList().get(locationTwo));
         this.getList().set(locationTwo, temp);
+
+        Thread.sleep(100);
+        visualizerPanel.repaint();
     }
 
     public int compare(int numOne, int numTwo) {
@@ -33,7 +36,7 @@ public abstract class Algorithms {
     public abstract String printInfo(int type);
 
     /* Sort the list */
-    public abstract void sortList(VisualizerPanel visualizerPanel);
+    public abstract void sortList();
 
     public ArrayList<Integer> getList() {
         return list;
@@ -43,7 +46,7 @@ public abstract class Algorithms {
         return arraySize;
     }
 
-    public int getSleep() {
-        return sleep;
+    public VisualizerPanel getVisualizerPanel() {
+        return visualizerPanel;
     }
 }
