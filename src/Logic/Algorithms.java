@@ -4,6 +4,7 @@ import Graphics.VisualizerPanel;
 import java.util.ArrayList;
 
 public abstract class Algorithms {
+    /* Variable for list and pannel */
     private final ArrayList<Integer> list;
     private final int arraySize;
     private final VisualizerPanel visualizerPanel;
@@ -25,6 +26,8 @@ public abstract class Algorithms {
         visualizerPanel.repaint();
     }
 
+    /* Compare the values of 2 integers, returning 0 if they're equal, 1 if the first value is greater
+     * and -1 if the second value is greater */
     public int compare(int numOne, int numTwo) {
         if(numOne > numTwo) return 1;
         else if(numOne == numTwo) return 0;
@@ -38,14 +41,17 @@ public abstract class Algorithms {
     /* Sort the list */
     public abstract void sortList();
 
+    /* Returns the list of numbers */
     public ArrayList<Integer> getList() {
         return list;
     }
 
+    /* Returns size of array */
     public int getArraySize() {
         return arraySize;
     }
 
+    /* Returns visualizer panel */
     public VisualizerPanel getVisualizerPanel() {
         return visualizerPanel;
     }

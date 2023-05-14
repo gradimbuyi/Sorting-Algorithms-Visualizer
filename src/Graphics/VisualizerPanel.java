@@ -51,6 +51,7 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         this.setLayout(null);
     }
 
+    /* Setter for SwingWorker */
     public void setAnimate(SwingWorker<Void, Void> animate) {
         this.animate = animate;
     }
@@ -69,7 +70,6 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         menu.addItem("Quick Sort");
         menu.addItem("Merge Sort");
         menu.addItem("Merge Insertion Sort");
-
         menu.addActionListener(this);
 
         return menu;
@@ -155,7 +155,6 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         }
     }
 
-
     /* Animates our program */
     @Override
     public void actionPerformed(ActionEvent event) {
@@ -163,16 +162,13 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         if(animate != null) animate.cancel(true);
 
         if(event.getSource() == dropDownMenu || event.getSource() == reset) {
-
             animate = new SwingWorker<>() {
 
                 @Override
                 protected Void doInBackground() throws Exception {
                     for(int i = 0; i < 20; i++) {
                         Collections.shuffle(list);
-                        Thread.sleep(10);
-
-                        repaint();
+                        Thread.sleep(10); repaint();
                     }
                     return null;
                 }
