@@ -1,6 +1,11 @@
 package Graphics;
 
-import Logic.*;
+import Logic.Algorithms;
+import Logic.BubbleSort;
+import Logic.InsertionSort;
+import Logic.MergeSort;
+import Logic.QuickSort;
+import Logic.SelectionSort;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JComboBox;
@@ -14,10 +19,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
 
-public class VisualizerPanel extends JPanel implements ActionListener {
 
+public class VisualizerPanel extends JPanel implements ActionListener {
     /* Numbers and Algorithm variables */
-    private ArrayList<Integer> list;
+    private final ArrayList<Integer> list;
     private Algorithms algorithm;
 
     /* Button variables */
@@ -27,11 +32,11 @@ public class VisualizerPanel extends JPanel implements ActionListener {
 
     /* variable for animation */
     private SwingWorker<Void, Void> animate = null;
-    private final int size = 63;
+    private final Integer size = 63;
+    private static Boolean isRunning = false;
 
     /* CONSTRUCTOR */
     public VisualizerPanel() {
-
         /* Generates the integers used to perform the visualization */
         list = generateNumbers();
 
@@ -69,13 +74,12 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         menu.addItem("Insertion Sort");
         menu.addItem("Quick Sort");
         menu.addItem("Merge Sort");
-        menu.addItem("Merge Insertion Sort");
         menu.addActionListener(this);
 
         return menu;
     }
 
-    /* Method to initalize buttons */
+    /* Method to initialize buttons */
     private JButton initializeButton(String name, int x) {
         JButton button = new JButton();
 
@@ -124,7 +128,6 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         if(name.equals("Insertion Sort")) newAlgorithm = new InsertionSort(list, size, this);
         if(name.equals("Quick Sort")) newAlgorithm = new QuickSort(list, size, this);
         if(name.equals("Merge Sort")) newAlgorithm = new MergeSort(list, size, this);
-        if(name.equals("Merge Insertion Sort")) newAlgorithm = new MergeInsertionSort(list, size, this);
 
         return newAlgorithm;
     }
@@ -141,9 +144,8 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         graphics.drawString("Space Complexity: " + algorithm.printInfo(1), 50, 180);
     }
 
-
     /* Draws rectangle based on values in the list */
-    private void paintRect (Graphics graphics){
+    private void paintRect(Graphics graphics){
         int x = 5;
         int height;
 
@@ -155,15 +157,22 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         }
     }
 
+    private boolean isSorted() {
+        for(int i = 0; i < size; i++) {
+            if(list.get(i) != i + 4) return false;
+        }
+        return true;
+    }
+
     /* Animates our program */
     @Override
     public void actionPerformed(ActionEvent event) {
-
-        if(animate != null) animate.cancel(true);
+        if(animate != null) {
+            animate.cancel(true);
+        }
 
         if(event.getSource() == dropDownMenu || event.getSource() == reset) {
             animate = new SwingWorker<>() {
-
                 @Override
                 protected Void doInBackground() throws Exception {
                     for(int i = 0; i < 20; i++) {
@@ -175,11 +184,14 @@ public class VisualizerPanel extends JPanel implements ActionListener {
             };
 
             animate.execute();
-        }
 
-        else if(event.getSource() == start) {
-            algorithm.sortList();
-        }
+        } else if(event.getSource() == start) {
+            if(!isRunning && !isSorted()) {
+                start.setText("Pause");
+                repaint();
 
+                algorithm.sortList();
+            }
+        }
     }
 }

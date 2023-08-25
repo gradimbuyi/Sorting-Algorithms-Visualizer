@@ -11,10 +11,8 @@ public class SelectionSort extends Algorithms {
 
     @Override
     public String printInfo(int type) {
-
         if(type == 0) return "O(n^2)";
         if(type == 1) return "O(1)";
-
         return null;
     }
 
@@ -43,7 +41,7 @@ public class SelectionSort extends Algorithms {
 
                 for (int i = 0; i < getArraySize(); i++) {
                     lowestValueLocation = findLowestValue(i);
-                    swap(lowestValueLocation, i);
+                    swap(lowestValueLocation, i, 100);
                 }
 
                 return null;

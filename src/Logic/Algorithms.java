@@ -4,7 +4,7 @@ import Graphics.VisualizerPanel;
 import java.util.ArrayList;
 
 public abstract class Algorithms {
-    /* Variable for list and pannel */
+    /* Variable for list and panel */
     private final ArrayList<Integer> list;
     private final int arraySize;
     private final VisualizerPanel visualizerPanel;
@@ -17,12 +17,12 @@ public abstract class Algorithms {
     }
 
     /* Swap the location of 2 integers */
-    public void swap(int locationOne, int locationTwo) throws InterruptedException {
+    public void swap(int locationOne, int locationTwo, int speed) throws InterruptedException {
         int temp = this.getList().get(locationOne);
         this.getList().set(locationOne, this.getList().get(locationTwo));
         this.getList().set(locationTwo, temp);
 
-        Thread.sleep(100);
+        Thread.sleep(speed);
         visualizerPanel.repaint();
     }
 
@@ -31,7 +31,6 @@ public abstract class Algorithms {
     public int compare(int numOne, int numTwo) {
         if(numOne > numTwo) return 1;
         else if(numOne == numTwo) return 0;
-
         return -1;
     }
 

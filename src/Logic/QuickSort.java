@@ -23,23 +23,21 @@ public class QuickSort extends Algorithms {
 
         for(int j = low_index; j < high_index; j++) {
             if(compare(getList().get(j), getList().get(high_index)) == -1) {
-                swap(i, j); i++;
+                swap(i, j, 50); i++;
             }
         }
 
-        swap(i, high_index);
+        swap(i, high_index, 50);
         return i;
     }
 
     private void quick_sort_recursive(int low_index, int high_index) {
-
         SwingWorker<Void, Void> animate = new SwingWorker<>() {
             @Override
             protected Void doInBackground() throws Exception {
                 int pivot_index = repartition(low_index, high_index);
                 if(pivot_index - 1 > low_index) quick_sort_recursive(low_index, pivot_index - 1);
                 if(high_index > pivot_index) quick_sort_recursive(pivot_index + 1, high_index);
-
                 return null;
             }
         };
