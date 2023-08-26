@@ -2,11 +2,10 @@ package Logic;
 
 import Graphics.VisualizerPanel;
 
-import javax.swing.*;
+import javax.swing.SwingWorker;
 import java.util.ArrayList;
 
 public class MergeSort extends Algorithms {
-
     public MergeSort(ArrayList<Integer> list, int arraySize, VisualizerPanel visualizerPanel) {
         super(list, arraySize, visualizerPanel);
     }
@@ -19,62 +18,74 @@ public class MergeSort extends Algorithms {
         return null;
     }
 
-    private void merge_sort_merge(int low_index_one, int high_index_one, int high_index_two) throws InterruptedException {
-        // variables for for loop
-        int l = 0, r = 0;
+    private void recursive(int low_index, int high_index) throws InterruptedException {
+        int middle;
+        if(low_index < high_index) {
+            middle = (low_index + high_index) / 2;
 
-        // calculates the length of the left and right temp array
-        int left_length = high_index_one - low_index_one + 1;
-        int right_length = high_index_two - high_index_one;
+            recursive(low_index, middle);
+            recursive(middle + 1, high_index);
+            merge(low_index, middle, high_index);
+        }
+    }
+
+    private void iterative() throws InterruptedException {
+        int curr_size, low_index;
+
+        for(curr_size = 1; curr_size <= getArraySize() - 1; curr_size = 2 * curr_size) {
+            for(low_index = 0; low_index < getArraySize() - 1; low_index += 2 * curr_size) {
+                int middle = Math.min(low_index + curr_size - 1, getArraySize() - 1);
+                int high_index = Math.min(low_index + 2 * curr_size - 1, getArraySize() - 1);
+                merge(low_index, middle, high_index);
+            }
+        }
+    }
+
+    protected void merge(int low_index, int middle, int high_index) throws InterruptedException {
+        int left_length = middle - low_index + 1;
+        int right_length = high_index - middle;
 
         Integer[] left = new Integer[left_length];
         Integer[] right = new Integer[right_length];
 
         for(int i = 0; i < left_length; i++) {
-            left[i] = getList().get(low_index_one + i);
+            left[i] = getList().get(low_index + i);
         }
 
-        for(int i = 0; i < right_length; i++) {
-            right[i] = getList().get(high_index_one + 1 + i);
+        for(int i = 0 ; i < right_length; i++) {
+            right[i] = getList().get(middle + i + 1);
         }
 
-        for(int i = low_index_one; i <= high_index_two; i++) {
-            if((l < left_length) && (r >= right_length || compare(right[r], left[l]) == 1)) {
-                getList().set(i, left[l]); l++;
+        int l = 0, r = 0;
+
+        for(int i = low_index; i <= high_index; i++) {
+            if((l < left_length) && (r >= right_length || (compare(right[r], left[l]) == 1))){
+                getList().set(i, left[l]);
+                Thread.sleep(10);
+                getVisualizerPanel().repaint();
+                l++;
+
             } else {
-                getList().set(i, right[r]); r++;
+                getList().set(i, right[r]);
+                Thread.sleep(10);
+                getVisualizerPanel().repaint();
+                r++;
             }
         }
-
-        Thread.sleep(10);
-        getVisualizerPanel().repaint();
     }
 
-    private void merge_sort_recursive(int low_index, int high_index) {
+    @Override
+    public void sortList() {
         SwingWorker<Void, Void> animate = new SwingWorker<>() {
             @Override
             protected Void doInBackground() throws Exception {
-                int middle;
-
-                if(low_index < high_index) {
-                    middle = (low_index + high_index) / 2;
-
-                    merge_sort_recursive(low_index, middle);
-                    merge_sort_recursive(middle + 1, high_index);
-                    merge_sort_merge(low_index, middle, high_index);
-                }
-
+                recursive(0, getArraySize() - 1);
+                //iterative();
                 return null;
             }
         };
 
         getVisualizerPanel().setAnimate(animate);
         animate.execute();
-    }
-
-    @Override
-    public void sortList() {
-        merge_sort_recursive(0, getArraySize() - 1);
-        getVisualizerPanel().repaint();
     }
 }
