@@ -3,6 +3,7 @@ package Graphics;
 import Logic.Algorithms;
 import Logic.BubbleSort;
 import Logic.InsertionSort;
+import Logic.MergeInsertionSort;
 import Logic.MergeSort;
 import Logic.QuickSort;
 import Logic.SelectionSort;
@@ -19,36 +20,34 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Objects;
 
-
 public class VisualizerPanel extends JPanel implements ActionListener {
     /* Numbers and Algorithm variables */
-    private final ArrayList<Integer> list;
+    private final ArrayList<Integer> LIST_OF_NUMBERS;
     private Algorithms algorithm;
 
     /* Button variables */
-    private final JComboBox<String> dropDownMenu;
-    private final JButton start;
-    private final JButton reset;
+    private final JComboBox<String> DROP_DOWN_MENU;
+    private final JButton START_BUTTON;
+    private final JButton RESET_BUTTON;
 
     /* variable for animation */
     private SwingWorker<Void, Void> animate = null;
-    private final Integer size = 63;
-    private static Boolean isRunning = false;
+    private final Integer SIZE = 1578;
 
     /* CONSTRUCTOR */
     public VisualizerPanel() {
         /* Generates the integers used to perform the visualization */
-        list = generateNumbers();
+        LIST_OF_NUMBERS = generateNumbers();
 
         /* Initialize the buttons */
-        dropDownMenu = initializeDropDownMenu();
-        start = initializeButton("Start", 0);
-        reset = initializeButton("Reset", 100);
+        DROP_DOWN_MENU = initializeDropDownMenu();
+        START_BUTTON = initializeButton("Start", 0);
+        RESET_BUTTON = initializeButton("Reset", 100);
 
         /* Add button and timer to Panel */
-        this.add(dropDownMenu);
-        this.add(start);
-        this.add(reset);
+        this.add(DROP_DOWN_MENU);
+        this.add(START_BUTTON);
+        this.add(RESET_BUTTON);
 
         /* Initialize panel */
         this.setBackground(Color.black);
@@ -74,6 +73,7 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         menu.addItem("Insertion Sort");
         menu.addItem("Quick Sort");
         menu.addItem("Merge Sort");
+        //menu.addItem("Merge-Insertion Sort");
         menu.addActionListener(this);
 
         return menu;
@@ -96,8 +96,8 @@ public class VisualizerPanel extends JPanel implements ActionListener {
         ArrayList<Integer> numbers = new ArrayList<>();
 
         /* Generates numbers from 4 to 67 and shuffles our array */
-        for(int i = 0; i < size; i++) {
-            numbers.add(i + 4);
+        for(int i = 0; i < SIZE; i++) {
+            numbers.add((int)((i / 9.5) + 2));
         }
 
         Collections.shuffle(numbers);
@@ -123,11 +123,12 @@ public class VisualizerPanel extends JPanel implements ActionListener {
     private Algorithms initializeAlgorithm(String name) {
         Algorithms newAlgorithm = null;
 
-        if(name.equals("Bubble Sort")) newAlgorithm = new BubbleSort(list, size, this);
-        if(name.equals("Selection Sort")) newAlgorithm = new SelectionSort(list, size, this);
-        if(name.equals("Insertion Sort")) newAlgorithm = new InsertionSort(list, size, this);
-        if(name.equals("Quick Sort")) newAlgorithm = new QuickSort(list, size, this);
-        if(name.equals("Merge Sort")) newAlgorithm = new MergeSort(list, size, this);
+        if(name.equals("Bubble Sort")) newAlgorithm = new BubbleSort(LIST_OF_NUMBERS, SIZE, this);
+        if(name.equals("Selection Sort")) newAlgorithm = new SelectionSort(LIST_OF_NUMBERS, SIZE, this);
+        if(name.equals("Insertion Sort")) newAlgorithm = new InsertionSort(LIST_OF_NUMBERS, SIZE, this);
+        if(name.equals("Quick Sort")) newAlgorithm = new QuickSort(LIST_OF_NUMBERS, SIZE, this);
+        if(name.equals("Merge Sort")) newAlgorithm = new MergeSort(LIST_OF_NUMBERS, SIZE, this);
+        //if(name.equals("Merge-Insertion Sort")) newAlgorithm = new MergeInsertionSort(LIST_OF_NUMBERS, SIZE, this);
 
         return newAlgorithm;
     }
@@ -135,31 +136,31 @@ public class VisualizerPanel extends JPanel implements ActionListener {
     /* Prints information related to the algorithm */
     private void paintInfo(Graphics graphics) {
         graphics.setFont(new Font("Arial", Font.PLAIN, 15));
-        graphics.drawString("Algorithm: " + dropDownMenu.getSelectedItem(), 50, 120);
+        graphics.drawString("Algorithm: " + DROP_DOWN_MENU.getSelectedItem(), 50, 120);
 
         /* Initialize algorithm */
-        algorithm = initializeAlgorithm((String) Objects.requireNonNull(dropDownMenu.getSelectedItem()));
+        algorithm = initializeAlgorithm((String) Objects.requireNonNull(DROP_DOWN_MENU.getSelectedItem()));
 
         graphics.drawString("Time Complexity: " + algorithm.printInfo(0), 50, 150);
         graphics.drawString("Space Complexity: " + algorithm.printInfo(1), 50, 180);
     }
 
     /* Draws rectangle based on values in the list */
-    private void paintRect(Graphics graphics){
+    private void paintRect(Graphics graphics) {
         int x = 5;
         int height;
 
-        for (int i = 0; i < size; i++) {
-            height = list.get(i) * 10;
-            graphics.fillRect(x, 865 - height, 20, height);
+        for (int i = 0; i < SIZE; i++) {
+            height = LIST_OF_NUMBERS.get(i) * 4;
+            graphics.fillRect(x, 865 - height, 1, height);
 
-            x = x + 25;
+            x = x + 1;
         }
     }
 
     private boolean isSorted() {
-        for(int i = 0; i < size; i++) {
-            if(list.get(i) != i + 4) return false;
+        for(int i = 0; i < SIZE; i++) {
+            if(LIST_OF_NUMBERS.get(i) != i + 4) return false;
         }
         return true;
     }
@@ -167,16 +168,18 @@ public class VisualizerPanel extends JPanel implements ActionListener {
     /* Animates our program */
     @Override
     public void actionPerformed(ActionEvent event) {
+        boolean isRunning = false;
+
         if(animate != null) {
             animate.cancel(true);
         }
 
-        if(event.getSource() == dropDownMenu || event.getSource() == reset) {
+        if(event.getSource() == DROP_DOWN_MENU || event.getSource() == RESET_BUTTON) {
             animate = new SwingWorker<>() {
                 @Override
                 protected Void doInBackground() throws Exception {
                     for(int i = 0; i < 20; i++) {
-                        Collections.shuffle(list);
+                        Collections.shuffle(LIST_OF_NUMBERS);
                         Thread.sleep(10); repaint();
                     }
                     return null;
@@ -185,13 +188,15 @@ public class VisualizerPanel extends JPanel implements ActionListener {
 
             animate.execute();
 
-        } else if(event.getSource() == start) {
-            if(!isRunning && !isSorted()) {
-                start.setText("Pause");
-                repaint();
+        } else if(event.getSource() == START_BUTTON) {
+            //if(!isRunning && !isSorted()) {
+                //START_BUTTON.setText("Pause");
+                //repaint();
+                //algorithm.sortList();
+            //}
 
-                algorithm.sortList();
-            }
+            repaint();
+            algorithm.sortList();
         }
     }
 }

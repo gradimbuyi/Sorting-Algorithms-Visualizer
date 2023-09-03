@@ -5,7 +5,6 @@ import javax.swing.SwingWorker;
 import java.util.ArrayList;
 
 public class QuickSort extends Algorithms {
-
     public QuickSort(ArrayList<Integer> list, int arraySize, VisualizerPanel visualizerPanel) {
         super(list, arraySize, visualizerPanel);
     }
@@ -23,11 +22,11 @@ public class QuickSort extends Algorithms {
 
         for(int j = low_index; j < high_index; j++) {
             if(compare(getList().get(j), getList().get(high_index)) == -1) {
-                swap(i, j, 50); i++;
+                swap(i, j, 10); i++;
             }
         }
 
-        swap(i, high_index, 50);
+        swap(i, high_index, 10);
         return i;
     }
 

@@ -2,6 +2,14 @@ package Graphics;
 
 import javax.swing.JFrame;
 
+/**
+ * This class sets up the frame for our visualizer. Our frame has a width of 1580 and height of
+ * 900, with a default close operation set to EXIT_ON_CLOSE. Instead of
+ *
+ * @version 1.0
+ * @since August 26, 2023
+ * @author Gradi Tshielekeja Mbuyi
+ */
 public class VisualizerFrame {
     private final JFrame frame;
     private final VisualizerPanel panel;

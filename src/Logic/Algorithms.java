@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public abstract class Algorithms {
     /* Variable for list and panel */
     private final ArrayList<Integer> list;
-    private final int arraySize;
+    private final Integer arraySize;
     private final VisualizerPanel visualizerPanel;
 
     /* Default constructor for the algorithms */
